@@ -124,6 +124,6 @@ if __name__ == "__main__":
     open_data_telangana = openDataTelangana(api, conditions, headers, index_file)
     open_data_telangana.get_data()
 
-    # scheduler = BlockingScheduler()
-    # scheduler.add_job(open_data_telangana.get_data, "cron",  month = "*",day = "10", hour="11", minute="30", max_instances=5, coalesce=True, misfire_grace_time=300)
-    # scheduler.start()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(open_data_telangana.get_data, "cron",  month = "*",day = "10", hour="11", minute="30", max_instances=5, coalesce=True, misfire_grace_time=300)
+    scheduler.start()
