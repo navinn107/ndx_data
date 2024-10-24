@@ -1,0 +1,6 @@
+requests
+amqp
+apscheduler
+pika
+psycopg2-binary
+
