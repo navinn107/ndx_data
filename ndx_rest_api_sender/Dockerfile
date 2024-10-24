@@ -10,11 +10,13 @@ COPY . /ndx_rest_api_sender
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+
+# Set the FLASK_APP environment variable to your Flask application module
+ENV FLASK_APP=ndx_rest_api_sender:app
+
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Run the Flask app
-# CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+# Run the Flask app using the flask command
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
 
-
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
