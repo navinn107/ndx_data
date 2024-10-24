@@ -1,17 +1,14 @@
 # Use an official Python runtime as a parent image
-FROM python:3.11-slim
+FROM python:3.9-slim
 
 # Set the working directory in the container
-WORKDIR /ndx_rest_api_sender
+WORKDIR /ndx_receiver
 
 # Copy the current directory contents into the container at /app
-COPY . /ndx_rest_api_sender
+COPY . /ndx_receiver
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
-
-# Run the application
-CMD ["python3", "ndx_rest_api_sender.py"]
+# Run app.py when the container launches
+CMD ["python3", "rest_api_receiver.py"]
