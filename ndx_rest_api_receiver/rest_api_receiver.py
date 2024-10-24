@@ -141,14 +141,13 @@ class RestAPIReceiver:
         dictionary = {}
         valid_formats = ["<", ">", "="]  # Allowed formats for observation_datetime
 
-        print(json_array)
 
         while attempts < max_retries:
             try:
                 # v = " AND ".join(["{}='{}'".format(i, j) for i, j in json_array.items() if j is not None ])
                 conditions = []
 
-                # Build the query conditions
+                # Build the query conditionsf
                 for key, value in json_array.items():
                     if json_array.get(key, None):
 
@@ -230,7 +229,7 @@ class RestAPIReceiver:
             properties=pika.BasicProperties(correlation_id=corr_id),
             body=json.dumps(message)
         )
-        log.info(f".......Published Message: {message}.......")
+        log.info(f".......Published Message:.......")
 
 # Example usage
 if __name__ == "__main__":
