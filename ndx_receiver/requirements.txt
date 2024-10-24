@@ -2,4 +2,9 @@ requests
 amqp
 apscheduler
 pika
+<<<<<<< Updated upstream
 psycopg
+=======
+psycopg2-binary
+
+>>>>>>> Stashed changes
