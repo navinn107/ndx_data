@@ -494,6 +494,6 @@ class RestAPI:
         def page_not_found(e):
             return jsonify({'error': 'Invalid URL', 'detail': 'The requested URL is not found on the server.'}), 404
 
-if __name__ == "__main__":
-    my_app = RestAPI(config).app
-    my_app.run(host='0.0.0.0', port=5000, debug=True)
+my_app = RestAPI(config).app
+
+#    my_app.run(host='0.0.0.0', port=5000, debug=True)
