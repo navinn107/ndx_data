@@ -339,8 +339,11 @@ class RestAPI:
         response = self.publish(message)
 
         if response:
+            log.info('.................RESPONSE DONE..............')
+
             return jsonify(response), response["statusCode"]
         else:
+            log.info('.................NO RESPONSE MADE..............')
             return jsonify({"statusCode": 500, "detail": "INTERNAL SERVER ERROR"}), 500
  
     def setup_routes(self):
