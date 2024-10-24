@@ -228,6 +228,7 @@ class RestAPI:
     def registration(self):
         
         if request.headers.get('Content-Type') != 'application/json':
+            log.info('.................RESPONSE RETURNED  (NDX REGISTER DATA)..............')
             return jsonify({'error': 'Unsupported Media Type', 'message': 'Request must be in JSON format'}), 415
 
         data = request.json
@@ -236,9 +237,11 @@ class RestAPI:
         secretKey = data.get('secretKey')
 
         if not username or not password or not secretKey:
+            log.info('.................RESPONSE RETURNED  (NDX REGISTER DATA)..............')
             return jsonify({"message": "username, password and secretKey are required."}), 400
         
         if secretKey!=self.secretKey:
+            log.info('.................RESPONSE RETURNED  (NDX REGISTER DATA)..............')            
             return jsonify({"message": "secretKey is wrong. Please, try again."}), 400
 
         client_id = hashlib.sha256(username.encode()).hexdigest()
@@ -248,6 +251,7 @@ class RestAPI:
             client_secret = hashlib.sha256(password.encode()).hexdigest()
             self.psql_cursor.execute(f"""INSERT INTO public.users (clientID, clientSecretKey) VALUES ('{client_id}', '{client_secret}');""")
             self.psql_connection.commit()
+            log.info('.................RESPONSE RETURNED  (NDX REGISTER DATA)..............')
             return jsonify(
                 {
                     "statusCode": 200,
@@ -256,6 +260,7 @@ class RestAPI:
                 }
             ), 200
         else:
+            log.info('.................RESPONSE RETURNED  (NDX REGISTER DATA)..............')
             return jsonify({'statusCode': 200, 'results': "Username already exists"}), 200
 
     def get_token(self):
@@ -265,6 +270,7 @@ class RestAPI:
         client_secret = data.get('clientSecretKey')
         
         if not client_id or not client_secret:
+            log.info('.................RESPONSE RETURNED  (NDX GET TOKEN)..............')
             return jsonify({"statusCode": 400, "detail": "Both clientID and clientSecretKey are required."}), 400
         
         existing_user = self.fetch_clients(client_id)
@@ -287,12 +293,15 @@ class RestAPI:
                     'drl': self.drl
                 }
                 token = jwt.encode(payload, self.secretKey, algorithm=self.algo)
+                log.info('.................RESPONSE RETURNED  (NDX GET TOKEN)..............')
                 return jsonify({'token': token}), 200
             
             else:
+                log.info('.................RESPONSE RETURNED  (NDX GET TOKEN)..............')
                 return jsonify({"statusCode": 200,'results': "ClientID or ClientSecretKey is incorrect"}), 200
         
         else:
+            log.info('.................RESPONSE RETURNED  (NDX GET TOKEN)..............')
             return jsonify({"statusCode": 200,'results': "User is not registered"}), 200
  
     def get_data(self):
