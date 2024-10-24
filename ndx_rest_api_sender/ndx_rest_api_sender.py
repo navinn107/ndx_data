@@ -339,11 +339,11 @@ class RestAPI:
         response = self.publish(message)
 
         if response:
-            log.info('.................RESPONSE DONE..............')
+            log.info('.................RESPONSE PUBLISHED  (NDX GET DATA)..............')
 
             return jsonify(response), response["statusCode"]
         else:
-            log.info('.................NO RESPONSE MADE..............')
+            log.info('.................NO RESPONSE RECEIVED (NDX GET DATA)..............')
             return jsonify({"statusCode": 500, "detail": "INTERNAL SERVER ERROR"}), 500
  
     def setup_routes(self):
@@ -401,6 +401,7 @@ class RestAPI:
               415:
                 description: Unsupported Media Type
             """
+            log.info('.................NDX REGISTER DATA..............')
             return self.registration()
 
         @self.app.route('/api/ndx/get-token', methods=['POST'])
@@ -435,7 +436,7 @@ class RestAPI:
               400:
                 description: Bad request
             """
-
+            log.info('.................NDX GET TOKEN..............')
             return self.get_token()
 
         @self.app.route('/api/ndx/get-data', methods=['POST'])
@@ -483,6 +484,7 @@ class RestAPI:
                   500:
                     description: No response from server
             """
+            log.info('.................NDX GET DATA..............')
             return self.get_data()
         
         @self.app.route("/", methods=['GET'])
