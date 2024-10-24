@@ -141,6 +141,8 @@ class RestAPIReceiver:
         dictionary = {}
         valid_formats = ["<", ">", "="]  # Allowed formats for observation_datetime
 
+        print(json_array)
+
         while attempts < max_retries:
             try:
                 # v = " AND ".join(["{}='{}'".format(i, j) for i, j in json_array.items() if j is not None ])
@@ -148,25 +150,27 @@ class RestAPIReceiver:
 
                 # Build the query conditions
                 for key, value in json_array.items():
-                    if key == "observation_datetime":
-                        # Check if the value contains a valid operator
-                        if any(op in value for op in valid_formats):
-                            if '>' in value:
-                                conditions.append(f"{key} > '{value.replace('>', '').strip()}'")
-                            elif '<' in value:
-                                conditions.append(f"{key} < '{value.replace('<', '').strip()}'")
-                            elif '=' in value:
-                                conditions.append(f"{key} = '{value.replace('=', '').strip()}'")
+                    if json_array.get(key, None):
+
+                        if key == "observation_datetime":
+                            # Check if the value contains a valid operator
+                            if any(op in value for op in valid_formats):
+                                if '>' in value:
+                                    conditions.append(f"{key} > '{value.replace('>', '').strip()}'")
+                                elif '<' in value:
+                                    conditions.append(f"{key} < '{value.replace('<', '').strip()}'")
+                                elif '=' in value:
+                                    conditions.append(f"{key} = '{value.replace('=', '').strip()}'")
+                                else:
+                                    log.error(f"Invalid format for observation_datetime: {value}")
+                                    return {"statusCode": 400, "message": "Invalid observation_datetime format. Allowed formats are 'YYYY-MM-DD', 'YYYY-MM-DD <', 'YYYY-MM-DD >'."}
                             else:
+                                # Invalid if it's neither <, >, nor =
                                 log.error(f"Invalid format for observation_datetime: {value}")
                                 return {"statusCode": 400, "message": "Invalid observation_datetime format. Allowed formats are 'YYYY-MM-DD', 'YYYY-MM-DD <', 'YYYY-MM-DD >'."}
                         else:
-                            # Invalid if it's neither <, >, nor =
-                            log.error(f"Invalid format for observation_datetime: {value}")
-                            return {"statusCode": 400, "message": "Invalid observation_datetime format. Allowed formats are 'YYYY-MM-DD', 'YYYY-MM-DD <', 'YYYY-MM-DD >'."}
-                    else:
-                        # For all other fields, use equality
-                        conditions.append(f"{key} = '{value}'")
+                            # For all other fields, use equality
+                            conditions.append(f"{key} = '{value}'")
 
                 where_clause = " AND ".join(conditions)
                 query = f"SELECT * FROM weather_data WHERE {where_clause};"
