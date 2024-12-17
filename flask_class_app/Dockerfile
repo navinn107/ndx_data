@@ -1,18 +1,17 @@
-# Use the official Python image from the Docker Hub
+# Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
-# Set the working directory
-WORKDIR /app
+# Set the working directory in the container
+WORKDIR /ndx_rest_api_sender
 
-# Copy the requirements file (if any) and install dependencies
-COPY requirements.txt requirements.txt
+# Copy the current directory contents into the container at /ndx_rest_api_sender
+COPY . /ndx_rest_api_sender
+
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY app.py .
-
-# Expose the port the app runs on
+# Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Run the application
-CMD ["python", "app.py"]
+# Run the application with Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "ndx_rest_api_sender:app"]

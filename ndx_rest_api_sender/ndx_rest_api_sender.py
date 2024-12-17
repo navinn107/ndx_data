@@ -510,4 +510,4 @@ class RestAPI:
 
 my_app = RestAPI(config).app
 
-#    my_app.run(host='0.0.0.0', port=5000, debug=True)
+my_app.run(host='0.0.0.0', port=5000, debug=True)
